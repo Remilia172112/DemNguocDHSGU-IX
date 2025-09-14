@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Đếm ngược Đại Hội</title>
+        <link rel="icon" type="image/png" href="favicon.png" />
+        <style>
+            /* Nền trang */
+            body {
+                font-family: "Segoe UI", Arial, sans-serif;
+                background: url("nen-daihoi.png") no-repeat center center fixed; /* hình nền */
+                background-size: cover;
+                min-height: 100vh;
+                margin: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            /* Overlay để làm mờ ảnh nền */
+            body::before {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.3); /* lớp phủ tối nhẹ */
+                z-index: 0;
+            }
+
+            .countdown-container {
+                width: 95%;
+                max-width: 1200px;
+                background: rgba(255, 255, 255, 0.2); /* mờ */
+                border-radius: 25px;
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+                padding: 50px 30px;
+                box-sizing: border-box;
+                text-align: center;
+                position: relative;
+                z-index: 1;
+                backdrop-filter: blur(15px); /* hiệu ứng kính */
+                -webkit-backdrop-filter: blur(15px);
+            }
+
+            /* Logo + text */
+            .top-section {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+                gap: 30px;
+            }
+
+            .logo {
+                flex: 1;
+                text-align: center;
+            }
+            .logo img {
+                width: 180px;
+                max-width: 90%;
+                height: auto;
+                border-radius: 0;
+                border: none;
+                padding: 0;
+                background: transparent;
+            }
+
+            .text {
+                flex: 2;
+                text-align: center;
+                font-size: 2.2rem; /* chữ lớn hơn */
+                font-weight: 900; /* đậm nhất */
+                line-height: 1.6;
+                color: #ffffff; /* chữ trắng tinh */
+                text-shadow: 0 3px 6px rgba(0, 0, 0, 0.6), /* bóng chữ dày hơn */ 0 0 10px rgba(0, 0, 0, 0.4);
+                animation: fadeIn 1.5s ease-in-out forwards;
+            }
+
+            /* Hiệu ứng xuất hiện */
+            @keyframes fadeIn {
+                0% {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            /* Đồng hồ đếm ngược */
+            .countdown {
+                margin-top: 40px;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 25px;
+            }
+
+            .time-box {
+                background: rgba(30, 144, 255, 0.8);
+                color: white;
+                border-radius: 20px;
+                padding: 30px;
+                width: 150px;
+                text-align: center;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            }
+
+            .time-box .number {
+                font-size: 2.5rem;
+                font-weight: bold;
+                display: block;
+            }
+
+            .time-box .label {
+                font-size: 1.2rem;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            .btn-info {
+                display: inline-block;
+                margin-top: 40px;
+                padding: 15px 35px;
+                font-size: 1.2rem;
+                color: #fff;
+                background: linear-gradient(135deg, #1e90ff, #00c6ff);
+                border-radius: 12px;
+                text-decoration: none;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+            }
+            .btn-info:hover {
+                background: linear-gradient(135deg, #00c6ff, #1e90ff);
+                transform: translateY(-2px);
+            }
+
+            @media (max-width: 600px) {
+                .text {
+                    font-size: 1.2rem;
+                }
+                .time-box {
+                    width: 90px;
+                    padding: 15px;
+                }
+                .time-box .number {
+                    font-size: 1.5rem;
+                }
+                .time-box .label {
+                    font-size: 0.9rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="countdown-container">
+            <div class="top-section">
+                <div class="logo">
+                    <img src="logo-hsv.png" alt="Logo HSV" />
+                </div>
+                <div class="text">
+                    Đếm ngược Đại hội Đại biểu<br />
+                    Hội Sinh viên trường Đại học Sài Gòn<br />
+                    Lần thứ IX, Nhiệm kỳ 2025 - 2028
+                </div>
+            </div>
+
+            <div class="countdown">
+                <div class="time-box">
+                    <span class="number" id="days">0</span>
+                    <span class="label">Ngày</span>
+                </div>
+                <div class="time-box">
+                    <span class="number" id="hours">0</span>
+                    <span class="label">Giờ</span>
+                </div>
+                <div class="time-box">
+                    <span class="number" id="minutes">0</span>
+                    <span class="label">Phút</span>
+                </div>
+                <div class="time-box">
+                    <span class="number" id="seconds">0</span>
+                    <span class="label">Giây</span>
+                </div>
+            </div>
+
+            <!-- Nút xem thông tin Đại hội -->
+            <a class="btn-info" href="https://www.facebook.com/tuoitredhsaigon" target="_blank">Xem thông tin Đại hội</a>
+        </div>
+
+        <script>
+            // Ngày Đại hội
+            const eventDate = new Date("2025-10-11T08:00:00");
+
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = eventDate - now;
+
+                if (distance < 0) {
+                    document.querySelector(".countdown").innerHTML = "<h2>Đại hội đã diễn ra!</h2>";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("days").textContent = days;
+                document.getElementById("hours").textContent = hours;
+                document.getElementById("minutes").textContent = minutes;
+                document.getElementById("seconds").textContent = seconds;
+            }
+
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+        </script>
+    </body>
+</html>
